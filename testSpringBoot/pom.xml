@@ -86,6 +86,7 @@
             <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
             <!--<scope>provided</scope>-->
         <!--</dependency>-->
+
     </dependencies>
 
     <build>
@@ -114,15 +115,15 @@
                 </configuration>
             </plugin>
             <!-- java编译插件 -->
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<source>1.7</source>-->
-                    <!--<target>1.7</target>-->
-                    <!--<encoding>UTF-8</encoding>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
             <!--该插件的主要功能是进行项目的打包发布处理-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>

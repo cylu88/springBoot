@@ -13,6 +13,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableCaching
@@ -35,19 +36,25 @@ public class RedisConfig {
         return cacheManager;
     }*/
     @Bean
-    public RedisTemplate<String, String> RedisTemplate(RedisConnectionFactory factory){
-        StringRedisTemplate template = new StringRedisTemplate(factory);
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory){
+//        StringRedisTemplate template = new StringRedisTemplate(factory);
+        RedisTemplate<Object, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+
         setSerializer(template);//设置序列化工具
         template.afterPropertiesSet();
         return template;
     }
-    private void setSerializer(StringRedisTemplate template){
+    private void setSerializer(RedisTemplate template){
         @SuppressWarnings({ "rawtypes", "unchecked" })
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         jackson2JsonRedisSerializer.setObjectMapper(om);
-        template.setValueSerializer(jackson2JsonRedisSerializer);
+        template.setKeySerializer(new StringRedisSerializer());//指定key序列化，防止乱码
+        template.setValueSerializer(jackson2JsonRedisSerializer);//指定value序列化
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(jackson2JsonRedisSerializer);
     }
 }
